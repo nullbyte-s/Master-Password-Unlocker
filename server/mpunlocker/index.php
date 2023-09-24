@@ -2,7 +2,7 @@
 function gen() {
     $dia = date('j');
 	$hora = date('G');
-    $fator = pow((($dia + $hora) * 4.21) + 71933.3, 5) + ($hora * 100);
+    $fator = pow((($dia + $hora) * 4.27) + 99783.6, 3) + ($hora * 100);
     $senha = $fator % 100000000;
     return intval($senha);
 }
