@@ -5,7 +5,7 @@ import psutil
 import requests
 import pyautogui
 import pywinauto
-import win32api
+import ctypes
 import pygetwindow as gw
 from pywinauto.application import Application
 from pywinauto import Desktop
@@ -16,8 +16,13 @@ pyautogui.FAILSAFE = True
 
 key = b'tJ9Vi-HZfADG94nAwdZtm6vbu_GL09T_CtFa2fY4KEk='
 
+
 def open_search():
     pyautogui.hotkey('winleft', 's')
+
+def is_scroll_lock_on():
+    return ctypes.windll.user32.GetKeyState(0x91) != 0
+
 
 def descriptografar(senha_criptografada):
     f = Fernet(key)
@@ -41,8 +46,8 @@ data = {'password': currentpw}
 
 # Usando o Scroll Lock como um pequeno artifício para prevenir que terceiros que acessam a máquina desbloqueiem acidentalmente a senha mestra.
 # O código foi construído para substituir uma das teclas de atalho do teclado (neste exemplo, coloquei a tecla de busca). Se pressionada sem o Scroll Lock ativado, a função normal da tecla será executada; do contrário, rodaremos o código de desbloqueio.
-scroll_lock_state = win32api.GetKeyState(0x91)
-scroll_is_enabled = scroll_lock_state == 1 or scroll_lock_state == -127
+scroll_lock_state = is_scroll_lock_on()
+scroll_is_enabled = scroll_lock_state
 processos_em_execucao = psutil.process_iter(attrs=['name'])
 browser_em_execucao = any(
     p.info['name'] == 'brave.exe' for p in processos_em_execucao)
